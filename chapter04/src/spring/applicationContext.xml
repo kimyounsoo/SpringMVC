@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.3.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+		<!-- DB 설정 코드
+	: 스프링은 Connection, dataSource를 가지고 있지 않기 때문에 외부에서 가져온다. 
+	 예전에 setDriverClassName이라는 메소드를 사용해서 DB를 사용했었는데
+	 아래 첫 번째 <property>의 name속성에 set이 생략된 메소드 이름이 그대로 들어가있다.
+	 <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
+		<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"/>
+		<property name="url" value="jdbc:oracle:thin:@localhost:1521:xe"/>
+		<property name="username" value="c##java"/>
+		<property name="password" value="bit"/>
+		<property name="maxTotal" value="20"/>
+		<property name="maxIdle" value="3"/> 휴면상태일 때의 최대치
+	</bean> -->
+	
+	<!-- 위 의 코드를 p네임스페이스를 이용한 코드
+	<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource"
+	p:driverClassName="oracle.jdbc.driver.OracleDriver"
+	p:url="jdbc:oracle:thin:@localhost:1521:xe"
+	p:username="c#java"
+	p:password="bit"
+	p:maxTotal="20"
+	p:maxIdle="3"
+	></bean> -->
+	
+	<!-- 위 의 코드를 db.properties를 이용한 코드 어디에있는지 알려줘야한다 -->
+	<context:property-placeholder location="classpath:spring/db.properties"/>
+	
+	<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
+		<property name="driverClassName" value="${jdbc.driver}"/>
+		<property name="url" value="${jdbc.url}"/>
+		<property name="username" value="${jdbc.username}"/>
+		<property name="password" value="${jdbc.password}"/>
+		<property name="maxTotal" value="20"/>
+		<property name="maxIdle" value="3"/>
+	</bean>
+	
+	<!-- Menu -->
+	<!-- insert -->
+	<bean id="userInsertService" class="user.service.UserInsertService">
+		<property name="userDTO" ref="userDTO"/>
+		<property name="userDAO" ref="userDAOImpl"/>
+	</bean>
+	
+	<!-- select -->
+	<bean id="userSelectService" class="user.service.UserSelectService">
+		<property name="userDAO" ref="userDAOImpl"></property>
+	</bean>
+	
+	<!-- update -->
+	<bean id="userUpdateService" class="user.service.UserUpdateService">
+		<property name="userDAO" ref="userDAOImpl"></property>
+	</bean>
+	
+	<!-- delete -->
+	<bean id="userDeleteService" class="user.service.UserDeleteService">
+		<property name="userDAO" ref="userDAOImpl"></property>
+	</bean>
+	
+	<!-- DTO -->
+	<bean id="userDTO" class="user.bean.UserDTO"/>
+	
+	<!-- DTO -->
+	<!-- 이제부터 템플릿클래스를 따로 만들필요없다  UserDAOImpl 자체에서 상속받으면된다 -->
+	<!-- UserDAOImpl 에 상속 과정 오버라이드 나와있음 -->
+<!-- 	
+	<bean id="userDAOImpl" class="user.dao.UserDAOImpl">
+		<property name="jdbcTemplate" ref="jdbcTemplate"></property>
+	</bean>
+	Templete
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<constructor-arg ref="dataSource"></constructor-arg>
+	</bean> 
+	-->
+	
+	<!-- DAO -->
+	<!-- 프로퍼티는 세터(setDataSource)찾는 메소드인데 userDAOImpl에는 setter가없으므로 부모인 NamedParameterJdbcDaoSupport로 간다 -->
+	<bean id="userDAOImpl" class="user.dao.UserDAOImpl">
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+
+
+</beans>

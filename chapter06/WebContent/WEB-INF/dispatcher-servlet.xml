@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+	
+	
+	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver"><!-- InternalResourceViewResolver 이게오면 jsp 웹으로 띄워 주겟다는 것이다 -->
+		<property name="prefix" value="/view/"/> <!-- /view/라는 폴더안에 /hello.jsp 로간다 -->
+		<property name="suffix" value=".jsp"/> <!-- HelloController 의 "hello" 찾아서 hello.jsp강압적으로 .jsp를 붙인다 -->
+	</bean>
+	
+	<bean id="helloController" class="com.controller.HelloController"></bean>
+</beans>

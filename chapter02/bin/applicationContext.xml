@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+<!-- sample01 bean 생성 -->
+<!-- MessageBeanImpl messageBeanImpl new MessageBeanImpl 한것과 같은것 -->
+<!-- 생성자는 물귀신 -->
+<!-- property는 변수가 아니라 setter의 것이다 -->
+<bean id = "messageBeanImpl" class="sample01.MessageBeanImpl">
+	<constructor-arg>
+		<value>딸기</value>
+	</constructor-arg>
+	<property name="cost">
+		<value>5000</value>
+	</property>
+	<property name="qty" value="3"></property>
+</bean>
+
+<!-- sample02 -->
+<bean id = "calcAdd" class="sample02.CalcAdd">
+	<constructor-arg value="25"/>
+	<constructor-arg value="36"/>
+</bean>
+<bean id = "calcMul" class="sample02.CalcMul">
+	<property name="x" value="25"/>
+	<property name="y" value="36"/>
+</bean>
+
+<!-- sample03 -->
+<bean id="sungJukDTO" class="sample03.SungJukDTO">
+	<property name="name" value="김연수"></property>
+	<property name="kor" value="97"></property>
+	<property name="eng" value="98"></property>
+	<property name="math" value="100"></property>	
+</bean>
+<bean id="sungJukImpl" class="sample03.SungJukImpl">
+	<constructor-arg ref="sungJukDTO"></constructor-arg>
+</bean>
+
+<!-- sample05 -->
+<bean id="helloSpring" class="sample05.HelloSpring"></bean>
+
+<!-- 입력 -->
+<bean id="sungJukInput" class="sample05.SungJukInput" scope="prototype">
+<!-- 여기랑 SungJukDTO2 에다가 prototype 해줘야한다 -->
+	<property name="sungJukDTO2" ref="sungJukDTO2"/>
+	<property name="list" ref="arrayList"></property>
+</bean>
+<!-- 출력 -->
+<bean id="sungJukOutput" class="sample05.SungJukOutput">
+	<property name="list" ref="arrayList">
+	</property>
+</bean>
+
+
+
+<!-- 수정 -->
+<bean id="sungJukModify" class="sample05.SungJukModify">
+	<property name="list" ref="arrayList"></property>
+</bean>
+
+<!-- 삭제 -->
+<bean id="sungJukDelete" class="sample05.SungJukDelete">
+	<property name="list" ref="arrayList"></property>
+</bean> 
+
+
+<bean id="sungJukDTO2" class="sample05.SungJukDTO2" scope="prototype"></bean>
+<!-- 단 sungJukDTO의 경우엔 한 사람 한 사람의 데이터를 각각 가지고 있기 때문에 싱글톤으로 설정하면 전부 같은 데이터가 나타난다. 
+그러므로 scope를 prototype으로 설정해 각 각의 데이터가 나오게 한다.  -->
+<bean id="arrayList" class="java.util.ArrayList"></bean>
+
+<!-- sample04 -->
+<!--bean의 순서를 바꾸면 라이프싸이클의 순서도 바뀐다 -->
+<!-- MessageBeanImpl은 Outputter라는 클래스를 품고있기 때문에 생성자먼저 처리하고 자기것을처리한다 -->
+<!-- FileOutputter가 중간에 끼어든다  -->
+<bean id="messageBeanImpl2" class="sample04.MessageBeanImpl">
+	<constructor-arg value="홍길동"/>
+	<property name="phone" value="010-123-1234"/>
+	<property name="outputter" ref="fileOutputter"/>
+	
+</bean>
+<bean id="fileOutputter" class="sample04.FileOutputter">
+	<property name="filePath" value="C:/Spring/"/>
+	<property name="fileName" value="result.txt"/>
+</bean>
+</beans>
+
+
+

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="userSQL">
+	<!-- 회원가입 -->
+	<insert id="write" parameterType="user">
+		insert into usertable
+		values(#{name}, #{id}, #{pwd})
+	</insert>
+
+	<!-- 중복 아이디 -->
+	<select id="checkId" parameterType="String" resultType="user">
+		select *
+		from usertable where id=#{id}
+	</select>
+
+	<!-- 목록 -->
+	<select id="getUserList" resultType="user">
+		select * from usertable
+	</select>
+
+	<select id="getUser" parameterType="String" resultType="user">
+		select *
+		from usertable where id=#{id}
+	</select>
+
+	<update id="modify" parameterType="user">
+		update usertable set
+		name=#{name}, pwd=#{pwd} where id=#{id}
+	</update>
+
+	<delete id="delete" parameterType="String">
+		delete usertable where
+		id=#{id}
+	</delete>
+
+	<select id="search" parameterType="java.util.Map"
+		resultType="user">
+		select * from usertable where
+		<if test="searchOption=='name'">
+			name like '%'||#{searchText}||'%'
+		</if>
+		<if test="searchOption=='id'">
+			id like '%'||#{searchText}||'%'
+		</if>
+	</select>
+
+
+</mapper>

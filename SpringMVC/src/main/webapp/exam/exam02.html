@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<div id="demo">
+	<button>add</button>
+	<ul>
+		<li>test</li>
+		<li>test2</li>
+		<li>test3</li>
+	</ul>
+</div>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script type="text/javascript">
+$('#demo button').on('click', function(){
+	$('#demo').append('<li><font color=red>added</font></li>'); // append로 추가된 애들은 프로그램이바보라 몰라서 클릭이벤트가 먹히지 않게된다 added는 클릭해도 이벤트 발생이 안된다 이것을 '비동적' 이라고 한다
+}); 
+
+
+//비동적 처리 on 도 똑같이 비동적은 안먹힌다
+/* $('#demo li').on('click',function(){// demo 안에 있는 li 에게 click이벤트 건다, 그냥 click이벤트 단것과 같은것 bind 는 비추이지만 쓰이는곳이 간혹있다
+	alert($(this).text());
+	
+}); */
+
+//동적 처리
+//on을사용하면 앞에 bind 했던거처럼 이벤트 해제했다가 부모한테 다시 다걸어 주는것 같은 번거로운 코드를 쓸 필요가 없다
+$('#demo').on('click','li', function(){// 조상님 button, ul, il 골라쓸필요없이 조상님중 아무나 오면된다
+	alert($(this).text());
+});
+</script>
+</body>
+</html>
+
+<!-- 
+bind는 deprecate 되었고 on를 사용하라고 권장
+
+$(선택자).on( events [,selector] [,data], handler( eventObject ) )
+$(선택자).on(이벤트타입 [,자손선택자]   [,데이터], 핸들러())
+events : 공백으로 구분된 하나 이상의 이벤트 타입과 옵션인 네임스페이스.
+selector : 이벤트가 발생할 요소들의 자손을 찾는 선택자. 
+           선택자가 null 이거나 생략됐다면 이벤트는 선택된 요소에 한해서 반응한다.
+data : 이벤트가 발생할 때 핸들러에 전달할 데이터
+handler(eventObject) : 이벤트가 발생되면 실행될 기능. 
+                       false를 반환하는 함수라면 간단하게 false를 직접 인자로 하면 된다.
+ -->

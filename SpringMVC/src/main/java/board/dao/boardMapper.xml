@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="boardSQL">
+	<!-- 글쓰기 -->
+	<insert id="boardWrite" parameterType="java.util.Map">
+		insert into board(seq,id,name,email,subject,content,ref) values(seq_board.nextval
+																	  , #{id}
+																	  , #{name}
+																	  , #{email}
+																	  , #{subject}
+																	  , #{content}
+																	  , seq_board.currval)
+	</insert>
+	
+	<!-- 목록 -->
+	<select id="getBoardList" parameterType="java.util.Map" resultType="board">
+		select * from
+		(select rownum rn, tt.* from
+		(select * from board order by ref desc, step asc)tt
+		)where rn <![CDATA[ >= ]]> #{startNum} and rn <![CDATA[ <= ]]> #{endNum}
+	</select>
+	
+	<!-- 총글수 -->
+	<select id="getTotalA" resultType="int">
+		select count(*) from board
+	</select>
+	
+	<!-- 작성한 글 확인 -->
+	<select id="getBoard" parameterType="int" resultType="board">
+		select * from board where seq=#{seq}
+	</select>
+	
+	<!-- 조회수 증가 -->
+	<update id="hitUpdate" parameterType="int">
+		update board set hit=hit+1 where seq=#{seq}
+	</update>
+	
+	<!-- 글수정 -->
+	<update id="boardModify" parameterType="java.util.Map">
+		update board set subject=#{subject}, content=#{content}, logtime=sysdate where seq=#{seq}
+	</update>
+	
+	<!-- 답글쓰기 -->
+	<insert id="boardReply" parameterType="java.util.Map">
+		begin
+			update board set step=step+1 where ref=#{ref} and step>#{step};
+			
+			insert into board values(seq_board.nextval
+								, #{id}
+								, #{name}
+								, #{email}
+								, #{subject}
+								, #{content}
+								, #{ref} <!-- 원글ref -->
+								, #{lev} <!-- 원글lev+1 -->
+								, #{step} <!-- 원글step+1 -->
+								, #{pseq} <!-- 원글번호 -->
+								, 0 <!-- 답글수  -->
+								, 0 <!-- 조회수 -->
+								, sysdate);
+								
+			update board set reply=reply+1 where seq=#{pseq}; <!-- 원글번호 -->							
+		end;
+	</insert>
+
+	<!-- 글삭제 -->
+	<delete id="boardDelete" parameterType="int">
+		begin
+			update board set reply=reply-1 where seq = (select pseq from board where seq=#{seq});
+			
+			update board set subject=concat('[원글이 삭제된 답글]',subject) where pseq=#{seq};
+			
+			delete from board where seq=#{seq};
+		end;
+	</delete>
+	
+	<!-- 검색 -->
+	<select id="getBoardSearch" parameterType="java.util.Map" resultType="board">
+		<![CDATA[
+		select * from
+		(select rownum rn, tt.* from
+		(select * from board where ${searchType} like '%'||#{keyword}||'%' order by ref desc, step asc)tt
+		)where rn>=#{startNum} and rn<=#{endNum}
+		]]>
+	</select>
+	
+	<!-- 검색한 총글수 -->
+	<select id="getBoardSearchTotalA" parameterType="java.util.Map" resultType="int">
+		select count(*) from board where ${searchType} like '%'||#{keyword}||'%'
+	</select>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+

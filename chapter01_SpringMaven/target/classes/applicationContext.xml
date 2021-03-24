@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+	
+	<!-- sample03 -->
+	<!-- HelloSpring 의 MessageBean messageBean = new MessageBeanKo();과 같은문장 -->
+	<!-- 
+	아무말 없으면 싱글톤이 기본으로 잡힌다
+	scope="prototype"
+		  "request"
+		  "session"
+		  "singleton"
+	 -->
+	<context:component-scan base-package="sample03"/> <!-- 어디서 어노테이션을 쓰고있는지 명시해 줘야한다 -->
+	
+	<!-- sample04 -->
+	<context:component-scan base-package="sample04"/> <!-- 어디서 어노테이션을 쓰고있는지 명시해 줘야한다 -->
+	
+	<!-- sample05 -->
+	<context:component-scan base-package="sample05"/>
+</beans>

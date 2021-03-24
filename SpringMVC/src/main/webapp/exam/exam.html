@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<div id="demo">
+	<button>add</button>
+	<ul>
+		<li>test</li>
+		<li>test2</li>
+		<li>test3</li>
+	</ul>
+</div>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script type="text/javascript">
+$('#demo li').bind('click',function(){// demo 안에 있는 li 에게 click이벤트 건다, 그냥 click이벤트 단것과 같은것 bind 는 비추이지만 쓰이는곳이 간혹있다
+	alert($(this).text());
+	
+});
+//비동적 처리
+/* $('#demo button').bind('click', function(){ // 그냥 클릭이벤트랑 똑같은것
+	$('#demo').append('<li><font color=red>added</font></li>'); // append로 추가된 애들은 프로그램이바보라 몰라서 클릭이벤트가 먹히지 않게된다 added는 클릭해도 이벤트 발생이 안된다 이것을 '비동적' 이라고 한다
+}); */
+
+//동적 처리
+$('#demo button').bind('click', function(){ // bind 이벤트 걸고
+	$('#demo li').unbind('click'); // unbind 이벤트 해제
+	//li 이벤트 해제했으니 ul 에 다시 이벤트 걸어주어서 새로운 애들까지 이벤트를 먹히게 한다 이것을 '동적' 이라고한다
+	$('#demo ul').append('<li><font color=red>added</font></li>').find($('li')).click(function(){ // ul 추가하고 find li li 찾아서 얘도 이벤트 추가해라 라는 코드
+		alert($(this).text());
+	});
+});
+</script> 
+</body>
+</html>

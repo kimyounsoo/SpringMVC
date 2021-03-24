@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="imageboardSQL">
+
+<!-- 상품입력 -->
+	<insert id="imageboardWrite" parameterType="imageboard">
+				insert into imageboard values(seq_imageboard.nextval
+											 ,#{imageId}
+											 ,#{imageName}
+											 ,#{imagePrice}
+											 ,#{imageQty}
+											 ,#{imageContent}
+											 ,#{image1}
+											 ,sysdate)
+	</insert>
+	
+	<select id="getImageboardList" parameterType="java.util.Map" resultType="imageboard">
+		select * from
+		(select rownum rn, tt.* from
+		(select * from imageboard order by seq desc)tt
+		)where rn between #{startNum} and #{endNum}
+	</select>
+	
+	<select id="getImageboardTotalA" resultType="int">
+		select count(*) from imageboard
+	</select>
+	
+		<!-- 상품상세  -->
+	<select id="getImageboardView" parameterType="int" resultType="imageboard">
+		select * from imageboard where seq=#{seq}
+	</select>
+	
+	<!-- 상품 삭제  xml foreach 문 js forEach와는 다른것 -->
+	<!-- 아래 foreach 문이 (3,2,1)이다 -->
+	<!-- for(String data : 배열){ 
+			data(item 의 data)	
+
+	} -->
+	<delete id="imageboardDelete" parameterType="java.util.Map">
+		delete imageboard where seq in
+		
+		<foreach collection="array" item="data" index="i" open="(" close=")" separator=",">
+			<!-- ${array[i]} -->
+			#{data}
+		</foreach>
+		
+	</delete>
+</mapper>

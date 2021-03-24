@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+	
+	<context:component-scan base-package="sample01"/>
+	<!-- component 만 명시해 놨기때문에  생성자는 bean을 만들때 자동으로 불러오기때문에 add는 나왔지만 -->
+	<!-- setter를 사용한 mul은 property 와같은 호출메소드를 안썻기때문에 0이 나온다 -->
+	<!-- @Component를 썼을 때 DI중에 생성자는 자동으로 맵핑해주지만 Setter 하지않기때문에 자동으로 맵핑하게 해주는 방법은 CalcMul 확인 -->
+	<context:component-scan base-package="sample02"/>
+	<!-- <context:component-scan base-package="sample03"/> -->
+	<context:component-scan base-package="spring.conf"/>
+	<!-- sample05 들을 어노테이션으로 @Component 들로 대체해준다prototype들은 @Scope도 작성해준다 -->
+	<!-- setter인것들은 @Autowired 도해줌 -->
+	<context:component-scan base-package="sample05"/>
+</beans>
